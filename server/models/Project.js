@@ -44,7 +44,7 @@ projectSchema.methods.makePosts = function () {
         'https://api.twitter.com/1.1/statuses/update.json',
         user.token,
         user.tokenSecret, { status },
-        (e) => console.log(e),
+        (e) => console.log(e)
       );
     });
   });

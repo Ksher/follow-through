@@ -2078,7 +2078,7 @@ express-session@^1.15.3:
     uid-safe "~2.1.4"
     utils-merge "1.0.0"
 
-express@^4.13.3, express@~4.15.2:
+express@^4.13.3, express@^4.15.3:
   version "4.15.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.15.3.tgz#bab65d0f03aa80c358408972fc700f916944b662"
   dependencies:
@@ -2657,6 +2657,10 @@ hosted-git-info@^2.1.4:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.5.0.tgz#6d60e34b3abbc8313062c3b798ef8d901a07af3c"
 
+hover.css@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/hover.css/-/hover.css-2.2.0.tgz#3a457c4f6bf756dcebae0317f09a8088c7626a77"
+
 hpack.js@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
@@ -3150,6 +3154,7 @@ jade@~1.11.0:
     jstransformer "0.0.2"
     mkdirp "~0.5.0"
     transformers "2.1.0"
+    uglify-js "^2.4.19"
     void-elements "~2.0.1"
     with "~4.0.0"
 
