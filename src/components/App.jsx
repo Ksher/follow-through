@@ -19,9 +19,9 @@ export default class App extends React.Component {
       }
     }
 
-    this.getEventData = this.getEventData.bind(this);
+    this.getProjectData = this.getProjectData.bind(this);
     this.updatePostBody = this.updatePostBody.bind(this);
-    setInterval(this.getEventData, 1000);
+    setInterval(this.getProjectData, 1000);
   }
 
   render() {
@@ -39,28 +39,28 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    this.getEventData();
+    this.getProjectData();
   }
 
-  getEventData() {
+  getProjectData() {
     const xhr = new XMLHttpRequest;
-    xhr.open('GET', 'http://localhost:3000/event/5961542d933efc06b4b52cb5');
+    xhr.open('GET', 'http://localhost:3000/project/5961542d933efc06b4b52cb5');
     xhr.send();
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState !== 4) return;
-      const eventData = JSON.parse(xhr.response);
+      const projectData = JSON.parse(xhr.response);
 
       this.setState({
         yours: {
-          name: eventData.yours.profile.username,
-          image: eventData.yours.profile.image,
-          body: eventData.yours.post.text,
+          name: projectData.yours.profile.username,
+          image: projectData.yours.profile.image,
+          body: projectData.yours.post.text,
         },
         theirs: {
-          name: eventData.theirs.profile.username,
-          image: eventData.theirs.profile.image,
-          body: eventData.theirs.post.text,
+          name: projectData.theirs.profile.username,
+          image: projectData.theirs.profile.image,
+          body: projectData.theirs.post.text,
         },
       });
     }
@@ -68,18 +68,18 @@ export default class App extends React.Component {
 
   updatePostBody(text, agreed) {
     const xhr = new XMLHttpRequest;
-    xhr.open('Post', 'http://localhost:3000/event/5961542d933efc06b4b52cb5');
+    xhr.open('Post', 'http://localhost:3000/project/5961542d933efc06b4b52cb5');
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     const sendData = {};
     if (text) sendData.text = text;
     sendData.agreed = agreed ? true : false;
-    
+
     xhr.send(JSON.stringify(sendData));
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState !== 4) return;
-      this.getEventData();
+      this.getProjectData();
     }
   }
 };

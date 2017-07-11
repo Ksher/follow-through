@@ -13,7 +13,7 @@ const { ObjectId } = require('mongoose').Types;
 const { consumerKey, consumerSecret } = require('./config');
 const oa = require('./oauth/twitter');
 const User = require('./models/User');
-const Event = require('./models/Event');
+const Project = require('./models/Project');
 const Post = require('./models/Post');
 
 passport.use(new Strategy({
@@ -40,7 +40,7 @@ passport.use(new Strategy({
               image: profile._json.profile_image_url,
               token,
               tokenSecret,
-              events: [0]
+              projects: [0]
             })
             .then(() => {
               profile.token = token;
@@ -82,10 +82,10 @@ app.get('/twitter/return', passport.authenticate('twitter', {
   failureRedirect: '/login'
 }), (req, res) => {
   res.cookie('token', req.user.token);
-  res.redirect('/eventPage.html');
+  res.redirect('/projectPage.html');
 });
 
-app.get('/event/:id', (req, res) => {
+app.get('/project/:id', (req, res) => {
   if (!req.cookies.token) return redirect('/twitter/login');
   let userId;
 
@@ -93,13 +93,13 @@ app.get('/event/:id', (req, res) => {
     .then((user) => {
       if (!user) return redirect('/twitter/login');
       userId = user._id;
-      return Event.findOne({ _id: req.params.id })
+      return Project.findOne({ _id: req.params.id })
     })
-    .then((event) => {
-      if (!event) return;
+    .then((project) => {
+      if (!project) return;
 
-      const yourPost = event.posts.find(post => post.ownerId.toString() === userId.toString());
-      const theirPost = event.posts.find(post => post !== yourPost);
+      const yourPost = project.posts.find(post => post.ownerId.toString() === userId.toString());
+      const theirPost = project.posts.find(post => post !== yourPost);
       if (!yourPost || !theirPost) return console.log('POST NOT FOUND');
 
       const yourUserProfile = User.findOne({ _id: yourPost.ownerId });
@@ -116,7 +116,7 @@ app.get('/event/:id', (req, res) => {
     .catch(e => console.log(e));
 });
 
-app.post('/event/:id', (req, res) => {
+app.post('/project/:id', (req, res) => {
   if (!req.cookies.token) return redirect('/twitter/login');
   let userId;
 
@@ -125,37 +125,37 @@ app.post('/event/:id', (req, res) => {
       if (!user) return redirect('/twitter/login');
       userId = user._id;
 
-      return Event.findOne({ _id: req.params.id });
+      return Project.findOne({ _id: req.params.id });
     })
-    .then((event) => {
-      const userIndex = event.users.indexOf(ObjectId(userId));
-      let agreed = event.agreed;
+    .then((project) => {
+      const userIndex = project.users.indexOf(ObjectId(userId));
+      let agreed = project.agreed;
 
       if (req.body.text) agreed = [false, false]
       else agreed[userIndex] = req.body.agreed ? true : false;
 
-      const indexOfPostToChange = event.posts.findIndex(post => post.ownerId.toString() === userId.toString());
+      const indexOfPostToChange = project.posts.findIndex(post => post.ownerId.toString() === userId.toString());
       const indexToNotChange = indexOfPostToChange === 0 ? 1 : 0;
-      const postToChange = event.posts[indexOfPostToChange];
+      const postToChange = project.posts[indexOfPostToChange];
 
       const reqKeys = Object.keys(req.body);
-      const eventPostKeys = Object.keys(event.posts[indexOfPostToChange]);
-      reqKeys.filter((key) => eventPostKeys.includes(key));
+      const projectPostKeys = Object.keys(project.posts[indexOfPostToChange]);
+      reqKeys.filter((key) => projectPostKeys.includes(key));
       reqKeys.forEach(key => postToChange[key] = req.body[key]);
 
-      const newPosts = [event.posts[indexToNotChange], postToChange];
-      return Event.findOneAndUpdate({ _id: event._id }, { posts: newPosts, agreed }, { new: true });
+      const newPosts = [project.posts[indexToNotChange], postToChange];
+      return Project.findOneAndUpdate({ _id: project._id }, { posts: newPosts, agreed }, { new: true });
     })
-    .then((event) => {
-      console.log(event.agreed);
-      if (event.agreed.reduce((acc, val) => acc && val, true)) event.makePosts();
-      console.log(event.agreed.reduce((acc, val) => acc && val, true))
+    .then((project) => {
+      console.log(project.agreed);
+      if (project.agreed.reduce((acc, val) => acc && val, true)) project.makePosts();
+      console.log(project.agreed.reduce((acc, val) => acc && val, true))
       res.status(200).send('Success!');
     })
     .catch(e => console.log(e));
 });
 
-
+ 
 
 app.listen(3000);
 

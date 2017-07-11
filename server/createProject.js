@@ -1,5 +1,5 @@
 const Post = require('./models/Post');
-const Event = require('./models/Event');
+const Project = require('./models/Project');
 const User = require('./models/User');
 const { ObjectId } = require('mongoose').Types;
 const { mongoose } = require('./mongoose');
@@ -23,13 +23,13 @@ const { mongoose } = require('./mongoose');
 const newPostJerry = new Post({
   text: 'All these towels but I still cant get dry.  Was fun @amori93.',
   ownerId: ObjectId('596153df3827332f9cf2e2cf'),
-  eventId: ObjectId('5961542d933efc06b4b52cb5'),
+  projectId: ObjectId('5961542d933efc06b4b52cb5'),
 });
 
 const newPostChris = new Post({
   text: 'Had a great time at the water park with @jerryjong today!',
   ownerId: ObjectId('5961539d8a9ad2289c0df653'),
-  eventId: ObjectId('5961542d933efc06b4b52cb5'),
+  projectId: ObjectId('5961542d933efc06b4b52cb5'),
 });
 
 // Post.create(newPostPete)
@@ -42,10 +42,10 @@ const newPostChris = new Post({
 
 
 // ADD POST IDS TO THE EVENT
-Event.findByIdAndUpdate('5961542d933efc06b4b52cb5', {
+Project.findByIdAndUpdate('5961542d933efc06b4b52cb5', {
     posts: [newPostJerry, newPostChris]
   })
-  .then(event => console.log(event))
+  .then(project => console.log(project))
   .catch(e => console.log(e));
 
 

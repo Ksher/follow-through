@@ -4,7 +4,7 @@ const User = require('./User');
 const oa = require('./../oauth/twitter');
 
 
-const eventSchema = mongoose.Schema({
+const projectSchema = mongoose.Schema({
   users: {
     type: [mongoose.Schema.ObjectId],
     required: true,
@@ -27,9 +27,9 @@ const eventSchema = mongoose.Schema({
   }
 });
 
-eventSchema.methods.makePosts = function () {
-  const event = this;
-  const usersPromises = event.users.map((userId) => {
+projectSchema.methods.makePosts = function () {
+  const project = this;
+  const usersPromises = project.users.map((userId) => {
     return new Promise((resolve, reject) => {
       User.findOne({ _id: userId })
         .then(user => resolve(user))
@@ -39,7 +39,7 @@ eventSchema.methods.makePosts = function () {
 
   Promise.all(usersPromises).then(users => {
     users.forEach((user) => {
-      const status = event.posts.find(post => post.ownerId.toString() === user._id.toString()).text;
+      const status = project.posts.find(post => post.ownerId.toString() === user._id.toString()).text;
       oa.post(
         'https://api.twitter.com/1.1/statuses/update.json',
         user.token,
@@ -50,6 +50,6 @@ eventSchema.methods.makePosts = function () {
   });
 };
 
-const Event = mongoose.model('Event', eventSchema);
+const Project = mongoose.model('Project', projectSchema);
 
-module.exports = Event;
+module.exports = Project;

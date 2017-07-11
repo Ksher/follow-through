@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     required: true,
   },
-  eventId: {
+  projectId: {
     type: mongoose.Schema.ObjectId,
     required: true,
   },
