@@ -30,7 +30,7 @@
     "react-dom": "^15.6.1",
     "serve-favicon": "~2.4.2",
     "webpack": "^3.1.0",
-    "webpack-dev-server": "^2.5.1"
+    "webpack-dev-server": "^3.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
